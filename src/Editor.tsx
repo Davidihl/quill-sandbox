@@ -3,7 +3,33 @@ import { Button } from "antd";
 import Quill from "quill";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-// import "quill/dist/quill.core.css";
+import "quill/dist/quill.core.css";
+
+import { StyleAttributor, Scope } from "parchment";
+export const SizeStyle = new StyleAttributor("size", "font-size", {
+  scope: Scope.INLINE,
+});
+export const WidthStyle = new StyleAttributor("width", "width", {
+  scope: Scope.INLINE,
+});
+export const HeightStyle = new StyleAttributor("height", "height", {
+  scope: Scope.INLINE,
+});
+export const FontWeight = new StyleAttributor("font-weight", "font-weight", {
+  scope: Scope.INLINE,
+});
+export const FontFamily = new StyleAttributor("font-family", "font-family", {
+  scope: Scope.INLINE,
+});
+export const TextAlign = new StyleAttributor("text-align", "text-align", {
+  scope: Scope.BLOCK,
+});
+Quill.register(FontWeight, true);
+Quill.register(SizeStyle, true);
+Quill.register(HeightStyle, true);
+Quill.register(WidthStyle, true);
+Quill.register(FontFamily, true);
+Quill.register(TextAlign, true);
 
 export default function Editor() {
   const toolbarRef = useRef<HTMLDivElement>(null);
