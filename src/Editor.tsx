@@ -8,6 +8,9 @@ import "./editor.css";
 // import "quill/dist/quill.core.css";
 
 import { StyleAttributor, Scope } from "parchment";
+export const FontColor = new StyleAttributor("color", "color", {
+  scope: Scope.INLINE,
+});
 export const SizeStyle = new StyleAttributor("size", "font-size", {
   scope: Scope.INLINE,
 });
@@ -32,13 +35,14 @@ Quill.register(HeightStyle, true);
 Quill.register(WidthStyle, true);
 Quill.register(FontFamily, true);
 Quill.register(TextAlign, true);
+Quill.register(FontColor, true);
 
 export default function Editor() {
   const toolbarRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
+  const convertedHtml = useRef<HTMLDivElement>(null);
   const [toolbarLocation, setToolbarLocation] = useState<HTMLElement | null>();
-  const [htmlValue, setHtmlValue] = useState("");
 
   useEffect(() => {
     if (!editorRef.current || quillRef.current) {
@@ -104,8 +108,18 @@ export default function Editor() {
               });
               quillRef.current.setContents(deltaContent);
             }
+            console.log(quillRef.current?.getSemanticHTML());
+            if (convertedHtml.current) {
+              convertedHtml.current.innerText =
+                quillRef.current?.getSemanticHTML() || "";
+            }
             // event.currentTarget.innerHTML = "";
           }}
+        />
+        <div className="mt-4 mb-2 text-xs">Converted Quill HTML</div>
+        <div
+          ref={convertedHtml}
+          className="focus:ring-0 focus:outline-0 p-4 border font-mono text-xs border-gray-300 bg-gray-100 rounded"
         />
       </div>
     </>
