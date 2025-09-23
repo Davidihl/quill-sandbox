@@ -104,7 +104,7 @@ export default function Editor() {
               });
               quillRef.current.setContents(deltaContent);
             }
-            event.currentTarget.innerHTML = "";
+            // event.currentTarget.innerHTML = "";
           }}
         />
       </div>
