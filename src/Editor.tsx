@@ -8,6 +8,7 @@ import "./editor.css";
 // import "quill/dist/quill.core.css";
 
 import { StyleAttributor, Scope } from "parchment";
+import { useDebounce } from "@uidotdev/usehooks";
 export const FontColor = new StyleAttributor("color", "color", {
   scope: Scope.INLINE,
 });
@@ -60,6 +61,18 @@ export default function Editor() {
     }
   }, [toolbarLocation]);
 
+  useDebounce(() => {
+    if (!quillRef.current) {
+      return;
+    }
+    quillRef.current.on("text-change", () => {
+      if (convertedHtml.current) {
+        convertedHtml.current.innerText =
+          quillRef.current?.getSemanticHTML() || "";
+      }
+    });
+  }, 1000);
+
   const toolbar: ReactNode = (
     <div ref={toolbarRef}>
       <span className="ql-formats">
@@ -108,7 +121,7 @@ export default function Editor() {
               });
               quillRef.current.setContents(deltaContent);
             }
-            console.log(quillRef.current?.getSemanticHTML());
+
             if (convertedHtml.current) {
               convertedHtml.current.innerText =
                 quillRef.current?.getSemanticHTML() || "";
