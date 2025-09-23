@@ -121,12 +121,6 @@ export default function Editor() {
               });
               quillRef.current.setContents(deltaContent);
             }
-
-            if (convertedHtml.current) {
-              convertedHtml.current.innerText =
-                quillRef.current?.getSemanticHTML() || "";
-            }
-            // event.currentTarget.innerHTML = "";
           }}
         />
         <div className="mt-4 mb-2 text-xs">Converted Quill HTML:</div>
