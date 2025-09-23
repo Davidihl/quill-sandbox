@@ -18,11 +18,14 @@ export default function Editor() {
     const toolbarDiv: HTMLElement | null =
       document.getElementById("global-toolbar");
     setToolbarLocation(toolbarDiv);
-    const quill = new Quill(editorRef.current, {
-      modules: { toolbar: toolbarRef.current },
-    });
-    quillRef.current = quill;
-  }, []);
+
+    if (toolbarLocation) {
+      const quill = new Quill(editorRef.current, {
+        modules: { toolbar: toolbarRef.current },
+      });
+      quillRef.current = quill;
+    }
+  }, [toolbarLocation]);
 
   const toolbar: ReactNode = (
     <div ref={toolbarRef}>
