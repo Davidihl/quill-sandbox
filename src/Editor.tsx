@@ -3,6 +3,8 @@ import { Button } from "antd";
 import Quill from "quill";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import DOMPurify from "dompurify";
+import "./editor.css";
 // import "quill/dist/quill.core.css";
 
 import { StyleAttributor, Scope } from "parchment";
@@ -36,6 +38,7 @@ export default function Editor() {
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
   const [toolbarLocation, setToolbarLocation] = useState<HTMLElement | null>();
+  const [htmlValue, setHtmlValue] = useState("");
 
   useEffect(() => {
     if (!editorRef.current || quillRef.current) {
@@ -82,7 +85,29 @@ export default function Editor() {
         id="customEditor"
         ref={editorRef}
         className="bg-white w-3xl p-4 rounded"
-      ></div>
+      />
+
+      <div className="bg-white w-3xl p-4 rounded">
+        <div className="mb-2 text-xs">Copy HTML code here:</div>
+        <div
+          contentEditable={true}
+          className="focus:ring-0 focus:outline-0 p-4 border font-mono text-xs border-gray-300 bg-gray-100 rounded"
+          onBlur={(event) => {
+            const rawHtml = event.target.innerText;
+            const safeHtml = DOMPurify.sanitize(rawHtml, {
+              ALLOWED_ATTR: ["style", "class"],
+            });
+
+            if (quillRef.current) {
+              const deltaContent = quillRef.current.clipboard.convert({
+                html: safeHtml,
+              });
+              quillRef.current.setContents(deltaContent);
+            }
+            event.currentTarget.innerHTML = "";
+          }}
+        />
+      </div>
     </>
   );
 }
