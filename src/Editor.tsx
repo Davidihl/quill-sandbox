@@ -1,25 +1,54 @@
+import { BoldOutlined, ItalicOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 import Quill from "quill";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+// import "quill/dist/quill.core.css";
 
 export default function Editor() {
   const toolbarRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
+  const [toolbarLocation, setToolbarLocation] = useState<HTMLElement | null>();
 
   useEffect(() => {
     if (!editorRef.current || quillRef.current) {
       return;
     }
-
+    const toolbarDiv: HTMLElement | null =
+      document.getElementById("global-toolbar");
+    setToolbarLocation(toolbarDiv);
     const quill = new Quill(editorRef.current, {
-      modules: { toolbar: "toolbar" },
+      modules: { toolbar: toolbarRef.current },
     });
     quillRef.current = quill;
   }, []);
 
+  const toolbar: ReactNode = (
+    <div ref={toolbarRef}>
+      <span className="ql-formats">
+        <Button
+          type="text"
+          size="small"
+          className="ql-bold"
+          icon={<BoldOutlined />}
+        />
+        <Button
+          type="text"
+          size="small"
+          className="ql-italic"
+          icon={<ItalicOutlined />}
+        />
+      </span>
+      <span className="ql-formats">
+        <select className="ql-align"></select>
+      </span>
+    </div>
+  );
+
   return (
     <>
-      <div ref={toolbarRef}></div>
+      {toolbarLocation && createPortal(toolbar, toolbarLocation)}
       <div
         id="customEditor"
         ref={editorRef}
