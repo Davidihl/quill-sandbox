@@ -3,7 +3,7 @@ import { Button } from "antd";
 import Quill from "quill";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import "quill/dist/quill.core.css";
+// import "quill/dist/quill.core.css";
 
 import { StyleAttributor, Scope } from "parchment";
 export const SizeStyle = new StyleAttributor("size", "font-size", {
