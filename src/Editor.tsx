@@ -111,12 +111,12 @@ export default function Editor() {
       <span className="ql-formats">
         <Select
           size="small"
-          defaultValue={100}
+          defaultValue={false}
           onChange={(value) => {
             quillRef.current?.format("size", `${value}%`);
           }}
           options={[
-            { value: 100, label: "100%" },
+            { value: false, label: "100%" },
             { value: 200, label: "200%" },
           ]}
         />

@@ -2,6 +2,11 @@
   all: unset;
 }
 
+#customEditor.ql-container {
+  height: auto;
+  font-size: inherit;
+}
+
 #customEditor .ql-formats {
   margin-right: 8px;
 }
