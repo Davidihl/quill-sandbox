@@ -11,6 +11,7 @@ export const FontColor = new StyleAttributor("color", "color", {
   scope: Scope.INLINE,
 });
 export const SizeStyle = new StyleAttributor("size", "font-size", {
+  whitelist: ["50%", "200%"],
   scope: Scope.INLINE,
 });
 export const WidthStyle = new StyleAttributor("width", "width", {
@@ -26,7 +27,7 @@ export const FontFamily = new StyleAttributor("font-family", "font-family", {
   scope: Scope.INLINE,
 });
 export const TextAlign = new StyleAttributor("text-align", "text-align", {
-  scope: Scope.BLOCK,
+  scope: Scope.INLINE,
 });
 Quill.register(FontWeight, true);
 Quill.register(SizeStyle, true);
@@ -53,17 +54,36 @@ export default function Editor() {
     setToolbarLocation(toolbarDiv);
 
     if (toolbarLocation) {
+      const toolbarOptions = [
+        ["bold", "italic", "underline", "strike"], // toggled buttons
+        ["blockquote", "code-block"],
+        ["link", "image", "video", "formula"],
+
+        [{ header: 1 }, { header: 2 }], // custom button values
+        [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+        [{ script: "sub" }, { script: "super" }], // superscript/subscript
+        [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+        [{ direction: "rtl" }], // text direction
+
+        [{ size: ["50%", false, "200%"] }],
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+        [{ font: [] }],
+        [{ align: [] }],
+
+        ["clean"], // remove formatting button
+      ];
+
       const quill = new Quill(editorRef.current, {
         modules: {
-          toolbar: [
-            [{ header: [1, 2, false] }],
-            ["bold", "italic", "underline"],
-            ["image", "code-block"],
-          ],
+          toolbar: toolbarOptions,
         },
         theme: "snow",
         placeholder: "Insert text here",
+        formats: ["size"],
       });
+      quill.format("size", false);
       quillRef.current = quill;
 
       toolbarRef.current = editorContainerRef.current.querySelector(

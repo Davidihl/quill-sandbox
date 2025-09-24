@@ -18,3 +18,18 @@
   left: 0;
   right: 0;
 }
+
+.ql-snow .ql-picker.ql-size .ql-picker-label::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item::before {
+  content: attr(data-value);
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value=""]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value=""]::before {
+  content: "Normal";
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="false"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="false"]::before {
+  content: "Normal";
+}
