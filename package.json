@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@tailwindcss/vite": "^4.1.13",
     "@uidotdev/usehooks": "^2.4.1",
     "antd": "^5.27.4",
     "dompurify": "^3.2.7",
+    "lucide-react": "^0.544.0",
     "quill": "^2.0.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

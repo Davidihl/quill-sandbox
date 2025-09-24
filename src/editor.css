@@ -1,3 +1,7 @@
 .ql-editor {
   all: unset;
 }
+
+.ql-formats {
+  margin-right: 8px;
+}
