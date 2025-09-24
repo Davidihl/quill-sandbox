@@ -1,7 +1,7 @@
-.ql-editor {
+#customEditor .ql-editor {
   all: unset;
 }
 
-.ql-formats {
+#customEditor .ql-formats {
   margin-right: 8px;
 }

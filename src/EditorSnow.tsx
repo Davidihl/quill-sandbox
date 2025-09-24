@@ -1,16 +1,6 @@
-import {
-  AlignCenterOutlined,
-  AlignLeftOutlined,
-  AlignRightOutlined,
-  BoldOutlined,
-  ItalicOutlined,
-} from "@ant-design/icons";
-import { Button, Radio, Select } from "antd";
 import Quill from "quill";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
-import "./editor.css";
 import "quill/dist/quill.snow.css";
 
 import { StyleAttributor, Scope } from "parchment";
@@ -46,16 +36,15 @@ Quill.register(TextAlign, true);
 Quill.register(FontColor, true);
 
 export default function Editor() {
+  const editorContainerRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
   const convertedHtml = useRef<HTMLDivElement>(null);
   const [toolbarLocation, setToolbarLocation] = useState<HTMLElement | null>();
 
-  const [textAlign, setTextAlign] = useState<string>("left");
-
   useEffect(() => {
-    if (!editorRef.current || quillRef.current) {
+    if (!editorRef.current || !editorContainerRef.current || quillRef.current) {
       return;
     }
     const toolbarDiv: HTMLElement | null =
@@ -64,19 +53,28 @@ export default function Editor() {
 
     if (toolbarLocation) {
       const quill = new Quill(editorRef.current, {
-        modules: { toolbar: toolbarRef.current },
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, false] }],
+            ["bold", "italic", "underline"],
+            ["image", "code-block"],
+          ],
+        },
+        theme: "snow",
       });
       quillRef.current = quill;
 
-      quill.on("selection-change", (range) => {
-        console.log(range);
-        if (!range) return;
-        const formats = quill.getFormat(range);
-        console.log(formats["text-align"] || "left");
+      toolbarRef.current = editorContainerRef.current.querySelector(
+        'div[role="toolbar"].ql-toolbar.ql-snow'
+      );
 
-        // Update state for each format
-        setTextAlign((formats["text-align"] || "left") as string);
-      });
+      if (toolbarRef.current) {
+        toolbarLocation.appendChild(toolbarRef.current);
+      }
+
+      return () => {
+        toolbarLocation.innerHTML = "";
+      };
     }
   }, [toolbarLocation]);
 
@@ -92,73 +90,11 @@ export default function Editor() {
     });
   }, 1000);
 
-  const toolbar: ReactNode = (
-    <div ref={toolbarRef}>
-      <span className="ql-formats">
-        <Button
-          type="text"
-          size="small"
-          className="ql-bold"
-          icon={<BoldOutlined />}
-        />
-        <Button
-          type="text"
-          size="small"
-          className="ql-italic"
-          icon={<ItalicOutlined />}
-        />
-      </span>
-      <span className="ql-formats">
-        <Select
-          size="small"
-          defaultValue={100}
-          onChange={(value) => {
-            quillRef.current?.format("size", `${value}%`);
-          }}
-          options={[
-            { value: 100, label: "100%" },
-            { value: 200, label: "200%" },
-          ]}
-        />
-      </span>
-      <span className="ql-formats">
-        <Radio.Group
-          value={textAlign}
-          size="small"
-          onChange={(event) => {
-            quillRef.current?.format("text-align", event.target.value);
-            setTextAlign(event.target.value);
-          }}
-        >
-          <Radio.Button value="left">
-            <AlignLeftOutlined />
-          </Radio.Button>
-          <Radio.Button value="center">
-            <AlignCenterOutlined />
-          </Radio.Button>
-          <Radio.Button value="right">
-            <AlignRightOutlined />
-          </Radio.Button>
-          <Radio.Button value="justify">
-            <div className="relative">
-              <AlignLeftOutlined />
-              <AlignRightOutlined className="absolute left-0 top-[4px]" />
-            </div>
-          </Radio.Button>
-        </Radio.Group>
-      </span>
-    </div>
-  );
-
   return (
     <>
-      {toolbarLocation && createPortal(toolbar, toolbarLocation)}
-      <div
-        id="customEditor"
-        ref={editorRef}
-        className="bg-white w-3xl p-4 rounded"
-      />
-
+      <div ref={editorContainerRef} className="bg-white w-3xl p-4 rounded">
+        <div ref={editorRef} />
+      </div>
       <div className="bg-white w-3xl p-4 rounded">
         <div className="mb-2 text-xs">Copy HTML code here:</div>
         <div
