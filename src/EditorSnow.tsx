@@ -2,6 +2,7 @@ import Quill from "quill";
 import { useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 import "quill/dist/quill.snow.css";
+import "./editor-snow-customization.css";
 
 import { StyleAttributor, Scope } from "parchment";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -61,6 +62,7 @@ export default function Editor() {
           ],
         },
         theme: "snow",
+        placeholder: "Insert text here",
       });
       quillRef.current = quill;
 

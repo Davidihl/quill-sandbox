@@ -1,0 +1,19 @@
+.ql-editor {
+  all: unset;
+}
+
+.ql-formats {
+}
+
+.ql-toolbar.ql-snow {
+  border: none;
+}
+
+.ql-container.ql-snow {
+  border: none;
+}
+
+.ql-editor.ql-blank::before {
+  left: 0;
+  right: 0;
+}
