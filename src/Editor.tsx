@@ -5,7 +5,7 @@ import {
   BoldOutlined,
   ItalicOutlined,
 } from "@ant-design/icons";
-import { Button, Radio, Select } from "antd";
+import { Button, Divider, Radio, Select } from "antd";
 import Quill from "quill";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
@@ -94,59 +94,57 @@ export default function Editor() {
 
   const toolbar: ReactNode = (
     <div ref={toolbarRef}>
-      <span className="ql-formats">
-        <Button
-          type="text"
-          size="small"
-          className="ql-bold"
-          icon={<BoldOutlined />}
-        />
-        <Button
-          type="text"
-          size="small"
-          className="ql-italic"
-          icon={<ItalicOutlined />}
-        />
-      </span>
-      <span className="ql-formats">
-        <Select
-          size="small"
-          defaultValue={false}
-          onChange={(value) => {
-            quillRef.current?.format("size", `${value}%`);
-          }}
-          options={[
-            { value: false, label: "100%" },
-            { value: 200, label: "200%" },
-          ]}
-        />
-      </span>
-      <span className="ql-formats">
-        <Radio.Group
-          value={textAlign}
-          size="small"
-          onChange={(event) => {
-            quillRef.current?.format("text-align", event.target.value);
-            setTextAlign(event.target.value);
-          }}
-        >
-          <Radio.Button value="left">
+      <Button
+        type="text"
+        size="small"
+        className="ql-bold"
+        icon={<BoldOutlined />}
+      />
+      <Button
+        type="text"
+        size="small"
+        className="ql-italic"
+        icon={<ItalicOutlined />}
+      />
+
+      <Divider type="vertical" />
+      <Select
+        size="small"
+        defaultValue={false}
+        onChange={(value) => {
+          quillRef.current?.format("size", `${value}%`);
+        }}
+        options={[
+          { value: false, label: "100%" },
+          { value: 200, label: "200%" },
+        ]}
+      />
+
+      <Divider type="vertical" />
+      <Radio.Group
+        value={textAlign}
+        size="small"
+        onChange={(event) => {
+          quillRef.current?.format("text-align", event.target.value);
+          setTextAlign(event.target.value);
+        }}
+      >
+        <Radio.Button value="left">
+          <AlignLeftOutlined />
+        </Radio.Button>
+        <Radio.Button value="center">
+          <AlignCenterOutlined />
+        </Radio.Button>
+        <Radio.Button value="right">
+          <AlignRightOutlined />
+        </Radio.Button>
+        <Radio.Button value="justify">
+          <div className="relative">
             <AlignLeftOutlined />
-          </Radio.Button>
-          <Radio.Button value="center">
-            <AlignCenterOutlined />
-          </Radio.Button>
-          <Radio.Button value="right">
-            <AlignRightOutlined />
-          </Radio.Button>
-          <Radio.Button value="justify">
-            <div className="relative">
-              <AlignLeftOutlined />
-              <AlignRightOutlined className="absolute left-0 top-[4px]" />
-            </div>
-          </Radio.Button>
-        </Radio.Group>
-      </span>
+            <AlignRightOutlined className="absolute left-0 top-[4px]" />
+          </div>
+        </Radio.Button>
+      </Radio.Group>
     </div>
   );
 
