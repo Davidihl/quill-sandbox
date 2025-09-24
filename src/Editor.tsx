@@ -182,7 +182,7 @@ export default function Editor() {
         <div className="mt-4 mb-2 text-xs">Converted Quill HTML:</div>
         <div
           ref={convertedHtml}
-          className="focus:ring-0 focus:outline-0 p-4 border font-mono text-xs border-gray-300 bg-gray-100 rounded"
+          className="p-4 border font-mono text-xs border-gray-300 bg-gray-100 rounded break-all"
         />
       </div>
     </>
