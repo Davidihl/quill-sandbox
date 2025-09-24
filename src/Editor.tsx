@@ -14,7 +14,6 @@ import "./editor.css";
 import "quill/dist/quill.snow.css";
 
 import { StyleAttributor, Scope } from "parchment";
-import { useDebounce } from "@uidotdev/usehooks";
 
 export const FontColor = new StyleAttributor("color", "color", {
   scope: Scope.INLINE,
@@ -68,6 +67,13 @@ export default function Editor() {
       });
       quillRef.current = quill;
 
+      quillRef.current.on("text-change", () => {
+        if (convertedHtml.current) {
+          convertedHtml.current.innerText =
+            quillRef.current?.getSemanticHTML() || "";
+        }
+      });
+
       quill.on("selection-change", (range) => {
         console.log(range);
         if (!range) return;
@@ -79,18 +85,6 @@ export default function Editor() {
       });
     }
   }, [toolbarLocation]);
-
-  useDebounce(() => {
-    if (!quillRef.current) {
-      return;
-    }
-    quillRef.current.on("text-change", () => {
-      if (convertedHtml.current) {
-        convertedHtml.current.innerText =
-          quillRef.current?.getSemanticHTML() || "";
-      }
-    });
-  }, 1000);
 
   const toolbar: ReactNode = (
     <div ref={toolbarRef}>
@@ -126,7 +120,7 @@ export default function Editor() {
         size="small"
         onChange={(event) => {
           quillRef.current?.format("text-align", event.target.value);
-          setTextAlign(event.target.value);
+          setTextAlign(event.target.value); //
         }}
       >
         <Radio.Button value="left">

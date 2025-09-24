@@ -14,7 +14,6 @@
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@tailwindcss/vite": "^4.1.13",
     "@types/quill": "^2.0.6",
-    "@uidotdev/usehooks": "^2.4.1",
     "antd": "^5.27.4",
     "dompurify": "^3.2.7",
     "lucide-react": "^0.544.0",
