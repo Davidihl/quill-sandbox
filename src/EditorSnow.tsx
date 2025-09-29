@@ -5,7 +5,6 @@ import "quill/dist/quill.snow.css";
 import "./editor-snow-customization.css";
 
 import { StyleAttributor, Scope } from "parchment";
-import { useDebounce } from "@uidotdev/usehooks";
 
 export const FontColor = new StyleAttributor("color", "color", {
   scope: Scope.INLINE,
@@ -99,18 +98,6 @@ export default function Editor() {
       };
     }
   }, [toolbarLocation]);
-
-  useDebounce(() => {
-    if (!quillRef.current) {
-      return;
-    }
-    quillRef.current.on("text-change", () => {
-      if (convertedHtml.current) {
-        convertedHtml.current.innerText =
-          quillRef.current?.getSemanticHTML() || "";
-      }
-    });
-  }, 1000);
 
   return (
     <>
