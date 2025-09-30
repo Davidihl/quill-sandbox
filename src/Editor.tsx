@@ -16,7 +16,7 @@ import "./editor.css";
 import { StyleAttributor, Scope } from "parchment";
 
 export const FontColor = new StyleAttributor("color", "color", {
-  scope: Scope.INLINE,
+  scope: Scope.BLOT,
 });
 export const SizeStyle = new StyleAttributor("size", "font-size", {
   scope: Scope.INLINE,
@@ -49,7 +49,9 @@ export default function Editor() {
   const editorRef = useRef<HTMLDivElement>(null);
   const quillRef = useRef<Quill | null>(null);
   const convertedHtml = useRef<HTMLDivElement>(null);
+  const originalHtml = useRef<HTMLDivElement>(null);
   const [toolbarLocation, setToolbarLocation] = useState<HTMLElement | null>();
+  const [test, setTest] = useState("");
 
   const [textAlign, setTextAlign] = useState<string>("left");
 
@@ -162,7 +164,14 @@ export default function Editor() {
       />
 
       <div className="bg-white w-3xl p-4 rounded">
-        <div className="mb-2 text-xs">Copy HTML code here:</div>
+        <div className="mb-2 text-xs">Original HTML rendered:</div>
+        <div className="py-4 break-all">
+          <div
+            className="w-full h-full min-h-8"
+            dangerouslySetInnerHTML={{ __html: test }}
+          />
+        </div>
+        <div className="mt-4 mb-2 text-xs">Copy HTML code here:</div>
         <div
           contentEditable={true}
           className="focus:ring-0 focus:outline-0 p-4 border font-mono text-xs border-gray-300 bg-gray-100 rounded"
@@ -176,6 +185,7 @@ export default function Editor() {
               const deltaContent = quillRef.current.clipboard.convert({
                 html: safeHtml,
               });
+              setTest(safeHtml);
               quillRef.current.setContents(deltaContent);
             }
           }}
