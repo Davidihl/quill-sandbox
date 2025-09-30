@@ -1,4 +1,8 @@
 #customEditor .ql-editor {
+  white-space: pre-wrap;
+}
+#customEditor .ql-editor:focus {
+  outline: none;
 }
 
 #customEditor.ql-container {

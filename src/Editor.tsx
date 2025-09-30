@@ -11,7 +11,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import DOMPurify from "dompurify";
 import "./editor.css";
-import "quill/dist/quill.snow.css";
+// import "quill/dist/quill.core.css";
 
 import { StyleAttributor, Scope } from "parchment";
 
@@ -83,6 +83,16 @@ export default function Editor() {
         // Update state for each format
         setTextAlign((formats["text-align"] || "left") as string);
       });
+
+      const handleKeydown = (event: KeyboardEvent) => {
+        console.log(event.key);
+        event.stopPropagation();
+      };
+      quill.root.addEventListener("keydown", handleKeydown);
+
+      return () => {
+        quill.root.removeEventListener("keydown", handleKeydown);
+      };
     }
   }, [toolbarLocation]);
 
